@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+
+	<entry key="insertPaymentList">
+		INSERT INTO PAYMENT_LIST(IMP_UID,PRODUCT_NO,BUYER_NO,APPLY_NO,MERCHANT_UID,PAY_DATE)
+		VALUES(?,?,?,?,?,SYSDATE)
+	</entry>
+	
+	<entry key="selectPaymentList">
+		SELECT*
+		FROM(
+		     SELECT ROWNUM RNUM,A.*
+		     FROM
+		     (
+		SELECT PRODUCT_NO,PRODUCT_TITLE,USER_NAME,BUYER_NO,IMP_UID,MERCHANT_UID,PAY_DATE,APPLY_NO,PRODUCT_PRICE
+				FROM PAYMENT_LIST
+				LEFT JOIN PRODUCT_LIST USING(PRODUCT_NO)
+				JOIN MEMBER_LIST M ON(BUYER_NO = M.USER_NO)	
+		        ORDER BY PAY_DATE DESC
+		        ) A
+		     )
+		    WHERE RNUM BETWEEN ? AND ?	
+	</entry>
+
+	<entry key="selectListCount">
+		SELECT COUNT(*) COUNT
+		FROM PAYMENT_LIST
+	</entry>
+	
+
+	
+	
+
+</properties>

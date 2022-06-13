@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<entry key="chatRoomSearch">
+		SELECT *
+		FROM CHAT_LIST
+		WHERE FIRST_USER_NO = (SELECT USER_NO
+		                        FROM PRODUCT_LIST
+		                        WHERE PRODUCT_NO = ?)
+		AND SECOND_USER_NO = ?
+		AND PRODUCT_NO = ?
+		AND CHAT_STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertChatList">
+		INSERT INTO CHAT_LIST(CHAT_NO,FIRST_USER_NO,SECOND_USER_NO,PRODUCT_NO)
+		VALUES(SEQ_CNO.NEXTVAL,(SELECT USER_NO
+		                        FROM PRODUCT_LIST
+		                        WHERE PRODUCT_NO = ?),?,?)
+	</entry>
+	
+	<entry key="chatRoomSearchAll">
+	SELECT *
+	FROM
+		(SELECT CHAT_NO
+        ,(SELECT USER_NICKNAME FROM MEMBER_LIST WHERE USER_NO=C.FIRST_USER_NO) SU
+        ,(SELECT USER_NICKNAME FROM MEMBER_LIST WHERE USER_NO=C.SECOND_USER_NO) BU
+        ,(SELECT PRODUCT_TITLE FROM PRODUCT_LIST WHERE PRODUCT_NO=C.PRODUCT_NO) PT
+        ,CHAT_DATE
+        ,CHAT_STATUS
+		FROM CHAT_LIST C
+		WHERE FIRST_USER_NO = ?
+		OR SECOND_USER_NO = ?
+		ORDER BY CHAT_DATE DESC)
+	WHERE CHAT_STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertFileInfo">
+		INSERT INTO CHAT_FILE_LIST(FILE_NO,CHAT_NO,FILE_NAME,FILE_PATH)
+		VALUES(SEQ_CFINO.NEXTVAL,?,?,?)
+	</entry>
+	
+	<entry key="searchFileInfo">
+		SELECT *
+		FROM CHAT_FILE_LIST
+		WHERE CHAT_NO = ?
+		AND FILE_STATUS = 'Y'
+	</entry>
+	
+	<entry key="exitChat">
+		UPDATE CHAT_LIST 
+		SET CHAT_STATUS = 'N'
+		WHERE CHAT_NO = ?
+	</entry>
+	
+	<entry key="deleteChatFile">
+		UPDATE CHAT_FILE_LIST
+		SET FILE_STATUS = 'N'
+		WHERE CHAT_NO = ?
+	</entry>
+</properties>

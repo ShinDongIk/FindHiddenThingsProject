@@ -1,0 +1,33 @@
+   table{
+        border-collapse: collapse;
+
+    }
+    .table tbody td:nth-child(3) {
+        width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        vertical-align: middle;
+        padding-top: 29px;
+        border: none;
+    }
+    .table tbody td{
+        vertical-align: middle;
+    }
+    .table tbody tr{
+        cursor: pointer;
+        border-top: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+    }
+    #outer #purchase_list_content_3_1 a{
+        display: inline-block;
+        margin-left:10px;
+        padding: 5px 10px;
+        border: 1px solid black;
+        border-radius: 0px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        background-color: rgb(64, 228, 132);
+    }

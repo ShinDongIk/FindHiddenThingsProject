@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="driver">
+		oracle.jdbc.driver.OracleDriver
+	</entry>
+	<entry key="url">
+		jdbc:oracle:thin:@localhost:1521:xe
+	</entry>
+	<entry key="userName">
+		SEMIPROJECT
+	</entry>
+	<entry key="userPwd">
+		SEMI
+	</entry>
+
+</properties>

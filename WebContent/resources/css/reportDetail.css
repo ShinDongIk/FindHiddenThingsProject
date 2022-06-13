@@ -1,0 +1,21 @@
+
+#report_content_2{
+        width: 100%;
+        height: 600px;
+        display: flex;
+   }
+    #report_content_2_1,#report_content_2_3{
+        width: 20%;
+    }
+    #report_content_2_2{
+        width: 60%;
+    }
+    #reportTab{
+        height: 30px;
+    }
+    #report_content_1_1 a{
+        color: black;
+    }
+    #report_table tr td input{
+       text-align: center;
+    }

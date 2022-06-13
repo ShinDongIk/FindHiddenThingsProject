@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<entry key="selectNoticeList">
+<!-- 		SELECT NOTICE_NO,NOTICE_TITLE,USER_ID,NOTICE_ENTER,NOTICE_VIEW -->
+<!-- 		FROM NOTICE_LIST N -->
+<!-- 		JOIN MEMBER_LIST USING (USER_NO) -->
+<!-- 		WHERE N.NOTICE_STATUS ='Y' -->
+<!-- 		ORDER BY NOTICE_ENTER DESC -->
+		SELECT*
+		     FROM(
+		         SELECT ROWNUM RNUM,A.*
+		         FROM
+		            (
+		            SELECT NOTICE_NO,NOTICE_TITLE,USER_ID,NOTICE_ENTER,NOTICE_VIEW
+		            FROM NOTICE_LIST N
+		            JOIN MEMBER_LIST USING (USER_NO)
+		            WHERE N.NOTICE_STATUS ='Y'
+		            ORDER BY NOTICE_ENTER DESC
+		            ) A
+		        )	
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="insertNotice">
+		INSERT INTO NOTICE_LIST(
+						 NOTICE_NO
+						,NOTICE_TITLE
+						,NOTICE_CONTENT
+						,USER_NO) 
+						VALUES 
+						(
+						SEQ_NNO.NEXTVAL
+						,?
+						,?
+						,?
+						)
+	</entry>
+	<entry key="increaseCount">
+	  	 UPDATE NOTICE_LIST
+		SET NOTICE_VIEW = NOTICE_VIEW+1
+		WHERE NOTICE_NO = ?
+		AND NOTICE_STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectNotice">
+	      SELECT NOTICE_NO
+	        ,NOTICE_TITLE
+	        ,NOTICE_CONTENT
+	        ,USER_ID
+	        ,NOTICE_VIEW
+	        ,NOTICE_ENTER
+	  FROM NOTICE_LIST N
+	  JOIN MEMBER_LIST USING (USER_NO)
+	  WHERE NOTICE_NO = ?
+	  AND N.NOTICE_STATUS = 'Y'
+	</entry>
+	
+	<entry key="updateNotice">
+		UPDATE NOTICE_LIST
+		SET NOTICE_TITLE = ?
+    		,NOTICE_CONTENT = ?
+		WHERE NOTICE_NO = ?
+		AND NOTICE_STATUS = 'Y'
+	</entry>
+	<entry key="deleteNotice">
+		UPDATE NOTICE_LIST
+		SET NOTICE_STATUS = 'N'
+		WHERE NOTICE_NO = ?
+	</entry>
+	<entry key="selectListCount">
+		SELECT COUNT(*) COUNT
+		FROM NOTICE_LIST
+		WHERE NOTICE_STATUS='Y'
+		
+	</entry>
+	
+	
+	
+	
+	
+	<entry key="selectNoticeFaqList">
+<!-- 		SELECT FAQ_NO, FAQ_TITLE, FAQ_CONTENT, USER_NO, USER_NAME, FAQ_ENTER, FAQ_VIEW, FAQ_STATUS -->
+<!-- 		FROM FAQ_LIST F -->
+<!-- 		JOIN MEMBER_LIST USING (USER_NO) -->
+<!-- 		WHERE F.FAQ_STATUS ='Y' -->
+<!-- 		ORDER BY FAQ_ENTER DESC -->
+				SELECT*
+        FROM(
+		 SELECT ROWNUM RNUM,A.*
+		 FROM
+		    (
+		    SELECT FAQ_NO, FAQ_TITLE, FAQ_CONTENT, USER_NO, USER_NAME, FAQ_ENTER, FAQ_VIEW, FAQ_STATUS
+            FROM FAQ_LIST F
+            JOIN MEMBER_LIST USING (USER_NO)
+            WHERE F.FAQ_STATUS ='Y'
+            ORDER BY FAQ_ENTER DESC
+		    ) A
+		)
+        WHERE RNUM BETWEEN ? AND ?
+		
+	</entry>
+	
+	<entry key="selectFaqListCount">
+		SELECT COUNT(*) COUNT
+		FROM FAQ_LIST
+		WHERE FAQ_STATUS ='Y'
+	</entry>
+	
+	<entry key="faqIncreaseCount">
+	  	UPDATE FAQ_LIST
+		SET FAQ_VIEW = FAQ_VIEW+1
+		WHERE FAQ_NO = ?
+		AND FAQ_STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectFaq">
+		  SELECT FAQ_NO
+		         ,FAQ_TITLE
+		         ,FAQ_CONTENT
+		        ,USER_ID
+		        ,FAQ_ENTER
+		  FROM FAQ_LIST F
+		  JOIN MEMBER_LIST USING (USER_NO)
+		  WHERE FAQ_NO = ?
+		  AND F.FAQ_STATUS = 'Y'
+	</entry>
+	
+	<entry key="faqInsertNotice">
+		INSERT INTO FAQ_LIST(
+							 FAQ_NO
+							,FAQ_TITLE
+							,FAQ_CONTENT
+							,USER_NO) 
+							VALUES 
+							(
+							SEQ_NNO.NEXTVAL
+							,?
+							,?
+							,?
+							)
+	</entry>
+	
+	<entry key="selectFaqUpdateForm"> 
+		SELECT FAQ_NO
+		    ,FAQ_TITLE
+		    ,FAQ_CONTENT
+		    ,USER_NO
+		    ,FAQ_ENTER
+		FROM FAQ_LIST F
+		JOIN MEMBER_LIST USING(USER_NO)
+		WHERE FAQ_NO = ?
+		AND F.FAQ_STATUS = 'Y'
+	</entry>
+	
+	<entry key="updateFaq">
+		UPDATE FAQ_LIST
+		SET FAQ_TITLE = ?
+    		,FAQ_CONTENT =?
+		WHERE FAQ_NO = ?
+		AND FAQ_STATUS = 'Y'
+	</entry>
+	
+	<entry key="deleteFaq">
+		UPDATE FAQ_LIST
+		SET FAQ_STATUS = 'N'
+		WHERE FAQ_NO = ?
+	</entry>
+	
+	<entry key="selectQuestionsListCount">
+		SELECT COUNT(*) COUNT
+		FROM QUESTION_LIST
+		WHERE QUESTION_STATUS ='Y'
+		AND QUESTION_NO = ?
+	</entry>
+	
+	<entry key="userQuestionsListCount">
+		SELECT COUNT(*) COUNT
+		FROM QUESTION_LIST
+		WHERE QUESTION_STATUS ='Y'
+		AND USER_NO=?
+	</entry>
+	
+	<entry key="adminQuestionsListCount">
+		SELECT COUNT(*) COUNT
+		FROM QUESTION_LIST
+		WHERE QUESTION_STATUS ='Y'
+	</entry>
+	
+	<entry key="userQuestionList">
+<!-- 		SELECT QUESTION_NO,QUESTION_TITLE,QUESTION_CONTENT,USER_NO,USER_NAME,QUESTION_ENTER,QUESTION_VIEW,QUESTION_STATUS -->
+<!-- 		FROM QUESTION_LIST Q -->
+<!-- 		JOIN MEMBER_LIST USING (USER_NO) -->
+<!-- 		WHERE Q.QUESTION_STATUS ='Y' -->
+<!-- 		AND USER_NO = ? -->
+<!-- 		ORDER BY QUESTION_ENTER DESC -->
+SELECT*
+		FROM(
+		 SELECT ROWNUM RNUM,A.*
+		 FROM
+		    (
+		    SELECT QUESTION_NO,QUESTION_TITLE,QUESTION_CONTENT,USER_NO,USER_NAME,QUESTION_ENTER,QUESTION_VIEW,QUESTION_STATUS
+            FROM QUESTION_LIST Q
+            JOIN MEMBER_LIST USING (USER_NO)
+            WHERE Q.QUESTION_STATUS ='Y'
+            AND USER_NO = ?
+		    ORDER BY QUESTION_ENTER DESC
+		    ) A
+		)
+        WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="adminQuestionList">
+<!-- 		SELECT QUESTION_NO,QUESTION_TITLE,QUESTION_CONTENT,USER_NO,USER_NAME,QUESTION_ENTER,QUESTION_VIEW,QUESTION_STATUS -->
+<!-- 		FROM QUESTION_LIST Q -->
+<!-- 		JOIN MEMBER_LIST USING (USER_NO) -->
+<!-- 		WHERE Q.QUESTION_STATUS ='Y' -->
+<!-- 		ORDER BY QUESTION_ENTER DESC -->
+SELECT*
+		 FROM(
+		 SELECT ROWNUM RNUM,A.*
+		 FROM
+		    (
+		    SELECT QUESTION_NO,QUESTION_TITLE,QUESTION_CONTENT,USER_NO,USER_NAME,QUESTION_ENTER,QUESTION_VIEW,QUESTION_STATUS
+            FROM QUESTION_LIST Q
+            JOIN MEMBER_LIST USING (USER_NO)
+            WHERE Q.QUESTION_STATUS ='Y'
+            ORDER BY QUESTION_ENTER DESC
+		    ) A
+		)
+        WHERE RNUM BETWEEN ? AND ?
+		
+	</entry>
+	
+	<entry key="questionIncreaseCount">
+		UPDATE QUESTION_LIST
+		SET QUESTION_VIEW = QUESTION_VIEW+1
+		WHERE QUESTION_NO = ?
+		AND QUESTION_STATUS = 'Y'
+	</entry>
+	
+		<entry key="selectQuestion">
+		  SELECT QUESTION_NO
+		         ,QUESTION_TITLE
+		         ,QUESTION_CONTENT
+		        ,USER_ID
+		        ,QUESTION_ENTER
+		        ,QUESTION_VIEW
+		        ,QUESTION_STATUS
+		  FROM QUESTION_LIST Q
+		  JOIN MEMBER_LIST USING (USER_NO)
+		  WHERE QUESTION_NO = ?
+		  AND Q.QUESTION_STATUS = 'Y'
+<!-- 		 SELECT QL.QUESTION_NO -->
+<!-- 		         ,QUESTION_TITLE -->
+<!--                  ,QUESTION_REPLY_NO -->
+<!-- 		         ,QUESTION_CONTENT -->
+<!-- 		        ,ML.USER_ID -->
+<!-- 		        ,QL.QUESTION_ENTER -->
+<!-- 		        ,QL.QUESTION_VIEW -->
+<!-- 		        ,QL.QUESTION_STATUS -->
+<!-- 		  FROM QUESTION_LIST QL -->
+<!-- 		  JOIN MEMBER_LIST ML ON (ML.USER_NO=QL.USER_NO) -->
+<!--           JOIN QUESTION_REPLY_LIST QRL ON (QRL.QUESTION_NO=QL.QUESTION_NO) -->
+<!-- 		  WHERE QRL.QUESTION_NO = ? -->
+<!-- 		  AND QL.QUESTION_STATUS = 'Y' -->
+	</entry>
+	
+	<entry key="questionReplySelect">
+       SELECT QUESTION_REPLY_NO,
+            QUESTION_NO,
+            QUESTION_REPLY_CONTENT,
+            ML.USER_NO,
+            ML.USER_ID,
+            QUESTION_REPLY_ENTER,
+            QUESTION_REPLY_STATUS
+        FROM QUESTION_REPLY_LIST QRL
+        JOIN MEMBER_LIST ML ON (QRL.USER_NO=ML.USER_NO)
+        JOIN QUESTION_LIST QL USING(QUESTION_NO)
+        WHERE QUESTION_NO=?
+        AND QL.QUESTION_STATUS='Y'
+	</entry>
+	
+	<entry key="insertQuestion">
+        	INSERT INTO QUESTION_LIST(
+						 QUESTION_NO
+						,QUESTION_TITLE
+						,QUESTION_CONTENT
+						,USER_NO) 
+						VALUES 
+						(
+						SEQ_NNO.NEXTVAL
+						,?
+						,?
+						,?
+						)
+	</entry>
+	
+	<entry key="deleteQuestionReply">
+		UPDATE QUESTION_REPLY_LIST
+		SET QUESTION_REPLY_STATUS = 'N'
+		WHERE QUESTION_REPLY_NO = ?
+	</entry>
+	
+	<entry key="insertQuestionReply">
+       	INSERT INTO QUESTION_REPLY_LIST(
+					 QUESTION_REPLY_NO
+					 ,QUESTION_NO
+					,QUESTION_REPLY_CONTENT
+					,USER_NO
+					,QUESTION_REPLY_ENTER
+					,QUESTION_REPLY_STATUS)
+					VALUES 
+					(
+					SEQ_QRNO.NEXTVAL
+					,?
+					,?
+					,?
+					,DEFAULT
+					,DEFAULT
+					)
+	</entry>
+	
+	<entry key="selectQuestionReplyUpdateForm">
+		SELECT QUESTION_REPLY_NO
+		        ,QUESTION_NO
+		        ,QUESTION_REPLY_CONTENT
+		        ,ML.USER_NO
+		        ,ML.USER_ID
+		        ,QUESTION_REPLY_ENTER
+		        ,QUESTION_REPLY_STATUS
+		FROM QUESTION_REPLY_LIST QRL
+		JOIN MEMBER_LIST ML ON(QRL.USER_NO=ML.USER_NO)
+		WHERE QUESTION_REPLY_NO = ?
+		AND QRL.QUESTION_REPLY_STATUS = 'Y'
+	</entry>
+	
+	<entry key="updateQuestionReply">
+		UPDATE QUESTION_REPLY_LIST
+		SET QUESTION_REPLY_CONTENT = ?
+		WHERE QUESTION_REPLY_NO = ?
+		AND QUESTION_REPLY_STATUS = 'Y'
+	</entry>
+	
+	<entry key="questionReplyNoSelect">
+		SELECT QUESTION_REPLY_NO
+        FROM QUESTION_REPLY_LIST QRL
+        JOIN QUESTION_LIST QL USING(QUESTION_NO)
+        WHERE QUESTION_NO=?
+        AND QRL.QUESTION_REPLY_STATUS='Y'
+        AND QL.QUESTION_STATUS='Y'
+	</entry>
+	
+	<entry key="questionReplySelectOne">
+       SELECT QUESTION_REPLY_NO,
+            QUESTION_NO,
+            QUESTION_REPLY_CONTENT,
+            ML.USER_NO,
+            ML.USER_ID,
+            QUESTION_REPLY_ENTER,
+            QUESTION_REPLY_STATUS
+        FROM QUESTION_REPLY_LIST QRL
+        JOIN MEMBER_LIST ML ON (QRL.USER_NO=ML.USER_NO)
+        JOIN QUESTION_LIST QL USING(QUESTION_NO)
+        WHERE QUESTION_NO=?
+        AND QL.QUESTION_STATUS='Y'
+        AND QUESTION_REPLY_STATUS='Y'
+	</entry>
+	
+</properties>

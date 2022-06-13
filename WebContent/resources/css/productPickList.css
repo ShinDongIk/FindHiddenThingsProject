@@ -1,0 +1,26 @@
+     #outer{
+        width: 100%;       
+    }
+    #pick_list{
+        border-collapse: separate;
+        border-spacing: 20px;
+        margin-left: 30px;
+    }
+    #pick_list tr{
+        display: block;
+        float: left;
+    }
+    #pick_list a{
+        color: black;
+    }
+    #outer #pickList_content_3_1 a{
+        display: inline-block;
+        margin-left:10px;
+        padding: 5px 10px;
+        border: 1px solid black;
+        border-radius: 0px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        background-color: rgb(64, 228, 132);
+    }

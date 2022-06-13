@@ -1,0 +1,82 @@
+@charset "utf-8";
+body { height:100%;}
+#content_2{ display: flex;
+    flex-direction: column;
+     }
+     #content_2>div:first-child{
+         flex: 1;
+     }
+     #content_2>div:last-child{
+         margin: auto;
+         width: 80%;
+         background-color: rgb(233, 253, 231);
+        flex: 1;
+        border: 1px solid gainsboro;
+    }
+.product_view { 
+  position: relative;
+  padding: 0 0 0 395px; 
+  width: 952px; 
+  box-sizing: border-box;
+}
+
+.product_view .img { 
+  position: absolute; 
+  left: 0; 
+  top: 0;
+}
+.product_view .img > img { width: 350px; height: 310px; border:1px solid #e8e8e8; }
+.product_view .img li:after { content: ""; display: block; clear: both;}
+.product_view .img li { float: left; padding: 10px 10px 0 0;}
+.product_view .img li.on img { border-color:#0a56a9;}
+.product_view .img li img { width: 68px; height: 68px; border:1px solid #e8e8e8;}
+.product_view h2 { margin: 0 0 15px; padding: 0 0 20px;  font-size:24px; color:#232323; }
+.product_view .price {font-size:24px; color:#232323; line-height: px;  }
+.product_view hr{border: 0; height: 1px; background: #ccc;}
+.product_view .btns { float : left; padding:  84px 0 0; text-align: center;}
+.product_view .btns > a { margin : 15px; display: inline-block; width: 136px; height: 42px;border-radius: 2px; font-size: 16px; color:#fff; line-height: 42px; }
+.product_view .btns > a.btn1 { background: rgb(26, 188, 156);}
+.pickBtn{margin : 15px; display: inline-block; width: 136px; height: 42px;border-radius: 2px; font-size: 16px; color:#fff; line-height: 42px; background: rgb(26, 188, 156); border: none;}
+.pickBtn:hover{cursor: pointer;}
+.btns_2{padding-left: 560px;}
+.btns_2>button{ background: rgb(26, 188, 156); color: white; border: 0; outline: 0;
+      margin : 20px; display: inline-block; width: 120px;
+     height: 42px;border-radius: 2px; font-size: 16px; color:#fff; line-height: 42px;}
+
+.product_content{position: relative; font-size: 15px; line-height:4ch}
+#container {
+    display: flex;
+  }
+  #box-left {
+   
+    flex-basis: 100px;
+  }
+  #box-center {
+
+    flex: 1;
+    text-align: center;
+  }
+  #box-right {
+ 
+    flex-basis: 150px;
+    text-align: right;
+  }
+#heart_img{width: 15px; height: 15px;}
+#eye_img{width: 15px; height: 15px;}
+#warning_img{width: 15px; height: 15px;}
+#trade_method{padding-top: 10px;}
+.buybtn{
+  width: 480px;
+  display: inline-block; 
+  height: 42px;
+  border-radius: 2px; 
+  font-size: 16px; color:#fff; 
+  line-height: 42px; 
+  background: rgb(26, 188, 156); 
+  border: none;
+}
+.buybtn:hover{
+  cursor: pointer;
+}
+
+

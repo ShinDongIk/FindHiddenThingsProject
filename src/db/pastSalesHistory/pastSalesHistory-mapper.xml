@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+
+<entry key="selectListCount"> <!-- 페이징 키 -->
+
+	SELECT COUNT(*) COUNT
+	FROM PRODUCT_LIST
+	WHERE PRODUCT_STATUS='Y'
+	AND USER_NO = ?
+	
+</entry>
+
+<entry key="PastSalesHistoryList"> 
+
+	SELECT*
+      FROM(
+           SELECT ROWNUM RNUM, A.*
+           FROM
+            (
+             SELECT 
+             PRODUCT_NO
+             ,PRODUCT_TITLE
+             ,PRODUCT_PRICE
+              ,PRODUCT_ENTERDATE
+<!--               ,(SELECT COUNT(*) COUNT  
+	                FROM CHAT_LIST
+	                WHERE PRODUCT_NO = ?) CHAT_COUNT -->
+              ,(SELECT COUNT(*) COUNT 
+	                FROM PICK_LIST
+	                WHERE USER_NO = ?) PRODUCT_PICK
+              ,PRODUCT_VIEWS
+              ,PRODUCT_SELL_STATUS 
+            FROM PRODUCT_LIST
+            WHERE USER_NO = ?
+            AND PRODUCT_STATUS='Y'
+            ORDER BY PRODUCT_NO DESC
+            ) A
+        )
+WHERE RNUM BETWEEN ? AND ? 
+
+</entry>
+
+<entry key="HistoryCountList"> <!-- 판매중,판매완료 카운트 -->
+
+SELECT*
+      FROM(
+           SELECT ROWNUM RNUM, A.*
+           FROM
+            (
+             SELECT PRODUCT_NO
+             ,PRODUCT_TITLE
+             ,PRODUCT_PRICE
+              ,PRODUCT_ENTERDATE
+              ,(SELECT COUNT(*) COUNT 
+	                FROM PICK_LIST
+	                WHERE USER_NO = ?) PRODUCT_PICK
+              ,PRODUCT_VIEWS
+              ,PRODUCT_SELL_STATUS 
+            FROM PRODUCT_LIST
+            WHERE USER_NO = ?
+            ) A
+        )
+
+
+</entry>
+
+
+
+
+
+
+	
+</properties>

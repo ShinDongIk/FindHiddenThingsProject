@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<entry key="selectProductList">
+		SELECT PRODUCT_NO
+			,PRODUCT_TITLE
+			,PRODUCT_PRICE
+			,PRODUCT_PICK
+			,USER_NICKNAME
+			,PRODUCT_STATUS
+			,PRODUCT_SELL_STATUS
+			,PRODUCT_CATEGORY
+			,PRODUCT_VIEWS
+			,PRODUCT_TRANSACTION
+			,PRODUCT_NEGO
+			,PRODUCT_CONTENT
+			,PRODUCT_ENTERDATE
+		FROM PRODUCT_LIST
+		JOIN MEMBER_LIST USING (USER_NO)
+		WHERE PRODUCT_CATEGORY = ?
+		AND PRODUCT_SELL_STATUS = 'N'
+		AND PRODUCT_STATUS ='Y'
+		ORDER BY PRODUCT_PRICE
+	</entry>
+	
+	<entry key="selectPicklist">
+		SELECT PL.*
+		FROM PICK_LIST PL,
+		    (SELECT USER_NO,P.PRODUCT_NO
+		    FROM MEMBER_LIST,
+		        (SELECT PRODUCT_NO
+		        FROM PRODUCT_LIST
+		        WHERE PRODUCT_NO = ?)P
+		    WHERE USER_NICKNAME = ?)MP
+		WHERE PL.USER_NO = MP.USER_NO
+		AND PL.PRODUCT_NO = MP.PRODUCT_NO
+	</entry>
+	
+	<entry key="insertPicklist">
+		INSERT INTO PICK_LIST(PRODUCT_NO,USER_NO)
+		VALUES(?,(SELECT USER_NO FROM MEMBER_LIST WHERE USER_NICKNAME=?))
+	</entry>
+	
+	<entry key="deletePicklist">
+		DELETE
+		FROM PICK_LIST
+		WHERE PRODUCT_NO = ?
+		AND USER_NO = ?
+	</entry>
+	
+	<entry key="loadPickList">
+		SELECT PRODUCT_NO,USER_NO
+		FROM PICK_LIST
+		WHERE USER_NO = ?
+		ORDER BY PRODUCT_NO DESC
+	</entry>
+	
+	<entry key="productListCount">
+		SELECT COUNT(*) COUNT
+		FROM PRODUCT_LIST
+		WHERE PRODUCT_CATEGORY = ?
+		AND PRODUCT_STATUS ='Y'
+		AND PRODUCT_SELL_STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectProductListPaging">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM,P.*
+		        FROM (SELECT PRODUCT_NO,
+		        			PRODUCT_TITLE,
+		        			PRODUCT_PRICE,
+		        			PRODUCT_PICK,
+		        			USER_NICKNAME,
+		        			PRODUCT_STATUS,
+		        			PRODUCT_SELL_STATUS,
+		        			PRODUCT_CATEGORY,
+		        			PRODUCT_VIEWS,
+		        			PRODUCT_TRANSACTION,
+		        			PRODUCT_NEGO,
+		        			PRODUCT_CONTENT,
+		        			PRODUCT_ENTERDATE,
+		        			FILE_CHANGE_NAME
+		                FROM PRODUCT_LIST
+		                JOIN MEMBER_LIST USING (USER_NO)
+                        JOIN PRODUCT_FILE_LIST USING (PRODUCT_NO)
+		                WHERE PRODUCT_CATEGORY = ?
+		                AND PRODUCT_SELL_STATUS = 'Y'
+		                AND PRODUCT_STATUS ='Y'
+		                ORDER BY PRODUCT_NO DESC)P)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="increaseCount"> 
+		UPDATE PRODUCT_LIST 
+		SET PRODUCT_VIEWS = PRODUCT_VIEWS+1 
+		WHERE PRODUCT_NO = ? 
+		AND PRODUCT_STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectProduct"> 
+		SELECT PRODUCT_NO
+			,PRODUCT_TITLE
+			,PRODUCT_PRICE
+			,PRODUCT_CONTENT
+			,USER_NAME
+			,USER_PHONE
+			,PRODUCT_PICK
+			,USER_NICKNAME
+			,PRODUCT_VIEWS
+			,PRODUCT_NEGO 
+			,PRODUCT_CATEGORY
+			,PRODUCT_TRANSACTION
+			,USER_NO
+			FROM PRODUCT_LIST 
+			LEFT JOIN MEMBER_LIST USING(USER_NO) 
+			WHERE PRODUCT_NO = ? 
+			AND PRODUCT_STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectAttachment"> 
+		SELECT FILE_NO,FILE_ORIGIN_NAME,FILE_CHANGE_NAME,FILE_PATH FROM PRODUCT_FILE_LIST WHERE PRODUCT_NO = ? 
+	</entry>
+	
+	<entry key="productPickCountDelete">
+		UPDATE PRODUCT_LIST 
+		SET PRODUCT_PICK = PRODUCT_PICK-1
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="productPickCountAdd">
+		UPDATE PRODUCT_LIST 
+		SET PRODUCT_PICK = PRODUCT_PICK+1
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="amIpick">
+		SELECT *
+		FROM PICK_LIST
+		WHERE PRODUCT_NO = ?
+		AND USER_NO = ?
+	</entry>
+	
+	<entry key="productPickNum">
+		SELECT PRODUCT_PICK
+		FROM PRODUCT_LIST
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="productSelled">
+		UPDATE PRODUCT_LIST
+		SET PRODUCT_SELL_STATUS = 'N'
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="productBuy">
+		INSERT INTO PURCHASE_LIST(PRODUCT_NO,USER_NO)
+		VALUES(?,?)
+	</entry>
+	
+	<entry key="searchProductHere">
+		SELECT USER_NO
+		FROM PURCHASE_LIST
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="insertProduct"> 
+		INSERT INTO PRODUCT_LIST(PRODUCT_NO,PRODUCT_TITLE,PRODUCT_PRICE,PRODUCT_CONTENT,USER_NO,PRODUCT_CATEGORY,PRODUCT_TRANSACTION) 
+		VALUES (SEQ_PNO.NEXTVAL,?,?,?,?,?,?) 
+	</entry>
+	<entry key="insertProductFile"> 
+		INSERT INTO PRODUCT_FILE_LIST(FILE_NO,PRODUCT_NO,FILE_ORIGIN_NAME,FILE_CHANGE_NAME,FILE_PATH,FILE_LEVEL) 
+		VALUES (SEQ_PFINO.NEXTVAL,SEQ_PNO.CURRVAL,?,?,?,?) 
+	</entry>
+	
+	<entry key="updateProduct">
+		UPDATE PRODUCT_LIST
+		SET PRODUCT_TITLE = ?
+			,PRODUCT_PRICE = ?
+			,PRODUCT_TRANSACTION = ?
+			,PRODUCT_CATEGORY = ?
+			, PRODUCT_CONTENT = ?
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="updateProductFile">
+		UPDATE PRODUCT_FILE_LIST
+		SET FILE_ORIGIN_NAME = ?
+			,FILE_CHANGE_NAME = ?
+			,FILE_PATH = ?
+			,UPLOAD_DATE = SYSDATE
+		WHERE FILE_NO = ?
+	</entry>
+	
+	<entry key="deleteProduct">
+		UPDATE PRODUCT_LIST
+		SET PRODUCT_STATUS = 'N'
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="deleteFileProduct">
+		UPDATE PRODUCT_FILE_LIST
+		SET FILE_STATUS = 'N'
+		WHERE PRODUCT_NO = ?
+	</entry>
+	
+	<entry key="menubarSearchCount">
+        SELECT COUNT(*) COUNT
+        FROM PRODUCT_LIST
+        WHERE PRODUCT_TITLE LIKE '%'||?||'%'
+        AND PRODUCT_STATUS ='Y'
+        AND PRODUCT_SELL_STATUS = 'Y'
+    </entry>
+
+    <entry key="menubarSearchListPaging">
+        SELECT *
+	      FROM (SELECT ROWNUM RNUM,P.*
+	              FROM (SELECT PRODUCT_NO
+	              		,PRODUCT_TITLE
+	              		,PRODUCT_PRICE
+	              		,PRODUCT_PICK
+	              		,USER_NICKNAME
+	              		,PRODUCT_STATUS
+	              		,PRODUCT_SELL_STATUS
+	              		,PRODUCT_CATEGORY
+	              		,PRODUCT_VIEWS
+	              		,PRODUCT_TRANSACTION
+	              		,PRODUCT_NEGO
+	              		,PRODUCT_CONTENT
+	              		,PRODUCT_ENTERDATE
+	              		,FILE_CHANGE_NAME
+	                      FROM PRODUCT_LIST
+	                      JOIN MEMBER_LIST USING (USER_NO)
+	                      JOIN PRODUCT_FILE_LIST USING (PRODUCT_NO)
+	                      WHERE PRODUCT_TITLE LIKE '%'||?||'%'
+	                      AND PRODUCT_SELL_STATUS = 'Y'
+	                      AND PRODUCT_STATUS ='Y'
+	                      ORDER BY PRODUCT_NO DESC)P)
+	      WHERE RNUM BETWEEN ? AND ?
+    </entry>
+    
+    <entry key="showPickList"> 
+    	SELECT * 
+    	FROM (SELECT ROWNUM RNUM
+    				,A.* 
+    				FROM (SELECT PRODUCT_NO
+    							,PRODUCT_TITLE
+    							,PRODUCT_PRICE
+    							,USER_NICKNAME
+    							,FILE_CHANGE_NAME 
+    						FROM PRODUCT_LIST 
+    						JOIN MEMBER_LIST USING(USER_NO) 
+    						JOIN PICK_LIST p USING(PRODUCT_NO) 
+    						JOIN PRODUCT_FILE_LIST USING(PRODUCT_NO) 
+    						WHERE P.USER_NO = ? AND PRODUCT_STATUS = 'Y' 
+    						AND PRODUCT_SELL_STATUS = 'Y' 
+    						ORDER BY PRODUCT_NO DESC)A) 
+    	WHERE RNUM BETWEEN ? AND ? 
+    </entry>
+    
+	<entry key="productPickListCount"> 
+		SELECT COUNT(*) COUNT 
+		FROM PRODUCT_LIST P 
+		JOIN PICK_LIST USING(PRODUCT_NO) 
+		WHERE P.USER_NO = ? 
+		AND PRODUCT_STATUS = 'Y' 
+		AND PRODUCT_SELL_STATUS = 'Y' 
+	</entry>
+	
+	<entry key="productSubListCount"> 
+		SELECT COUNT(*) COUNT
+		FROM PRODUCT_LIST
+		WHERE PRODUCT_CATEGORY = ?
+		AND PRODUCT_TITLE LIKE '%'||?||'%'
+		AND PRODUCT_STATUS ='Y'
+		AND PRODUCT_SELL_STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectProductSubTitlePaging">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM,P.*
+		        FROM (SELECT PRODUCT_NO,
+		        			PRODUCT_TITLE,
+		        			PRODUCT_PRICE,
+		        			PRODUCT_PICK,
+		        			USER_NICKNAME,
+		        			PRODUCT_STATUS,
+		        			PRODUCT_SELL_STATUS,
+		        			PRODUCT_CATEGORY,
+		        			PRODUCT_VIEWS,
+		        			PRODUCT_TRANSACTION,
+		        			PRODUCT_NEGO,
+		        			PRODUCT_CONTENT,
+		        			PRODUCT_ENTERDATE,
+		        			FILE_CHANGE_NAME
+		                FROM PRODUCT_LIST
+		                JOIN MEMBER_LIST USING (USER_NO)
+                        JOIN PRODUCT_FILE_LIST USING (PRODUCT_NO)
+		                WHERE PRODUCT_CATEGORY = ?
+                        AND PRODUCT_TITLE LIKE '%'||?||'%'
+		                AND PRODUCT_SELL_STATUS = 'Y'
+		                AND PRODUCT_STATUS ='Y'
+		                ORDER BY PRODUCT_NO DESC)P)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectProductSubNickNamePaging">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM,P.*
+		        FROM (SELECT PRODUCT_NO,
+		        			PRODUCT_TITLE,
+		        			PRODUCT_PRICE,
+		        			PRODUCT_PICK,
+		        			USER_NICKNAME,
+		        			PRODUCT_STATUS,
+		        			PRODUCT_SELL_STATUS,
+		        			PRODUCT_CATEGORY,
+		        			PRODUCT_VIEWS,
+		        			PRODUCT_TRANSACTION,
+		        			PRODUCT_NEGO,
+		        			PRODUCT_CONTENT,
+		        			PRODUCT_ENTERDATE,
+		        			FILE_CHANGE_NAME
+		                FROM PRODUCT_LIST
+		                JOIN MEMBER_LIST USING (USER_NO)
+                        JOIN PRODUCT_FILE_LIST USING (PRODUCT_NO)
+		                WHERE PRODUCT_CATEGORY = ?
+                        AND USER_NICKNAME LIKE '%'||?||'%'
+		                AND PRODUCT_SELL_STATUS = 'Y'
+		                AND PRODUCT_STATUS ='Y'
+		                ORDER BY PRODUCT_NO DESC)P)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+    
+    <entry key="purchaseListCount"> 
+    	SELECT COUNT(*) COUNT 
+    	FROM PRODUCT_LIST 
+    	JOIN PURCHASE_LIST P USING(PRODUCT_NO) 
+    	WHERE P.USER_NO = ? 
+    	AND PRODUCT_STATUS = 'Y' 
+    	AND PRODUCT_SELL_STATUS = 'N'
+    </entry>
+	<entry key="purchaseList"> 
+		SELECT * 
+		FROM (SELECT ROWNUM RNUM,A.* 
+				FROM(SELECT PU.PRODUCT_NO 
+						,PRODUCT_TITLE 
+						,PRODUCT_PRICE 
+						,(SELECT USER_NICKNAME 
+							FROM MEMBER_LIST 
+							WHERE USER_NO = (SELECT USER_NO 
+												FROM PRODUCT_LIST 
+												WHERE PRODUCT_NO=PU.PRODUCT_NO)) NICKNAME 
+												,PAY_DATE 
+												FROM PURCHASE_LIST PU 
+												LEFT JOIN PRODUCT_LIST PR ON PU.PRODUCT_NO=PR.PRODUCT_NO 
+												LEFT JOIN PAYMENT_LIST PY ON PU.PRODUCT_NO=PY.PRODUCT_NO 
+												WHERE PU.USER_NO = ? 
+												AND PRODUCT_STATUS = 'Y' 
+												AND PRODUCT_SELL_STATUS = 'N' 
+												ORDER BY PRODUCT_NO DESC)A) 
+		WHERE RNUM BETWEEN ? AND ? 
+	</entry>
+	
+	<entry key="purchaseFileName"> 
+		SELECT PRODUCT_NO
+				,FILE_CHANGE_NAME 
+		FROM PURCHASE_LIST 
+		JOIN PRODUCT_FILE_LIST USING(PRODUCT_NO) 
+		WHERE USER_NO = ?
+	 </entry>
+	 
+	 <entry key="productMainList">
+		SELECT PRODUCT_NO,
+				PRODUCT_TITLE,
+				PRODUCT_PRICE,
+				PRODUCT_PICK,
+				USER_NICKNAME,
+				PRODUCT_STATUS,
+				PRODUCT_SELL_STATUS,
+				PRODUCT_CATEGORY,
+				PRODUCT_VIEWS,
+				PRODUCT_TRANSACTION,
+				PRODUCT_NEGO,
+				PRODUCT_CONTENT,
+				PRODUCT_ENTERDATE,
+				FILE_CHANGE_NAME
+		FROM PRODUCT_LIST
+		JOIN MEMBER_LIST USING (USER_NO)
+		JOIN PRODUCT_FILE_LIST USING (PRODUCT_NO)
+		WHERE PRODUCT_CATEGORY = ?
+		AND PRODUCT_SELL_STATUS = 'Y'
+		AND PRODUCT_STATUS ='Y'
+		ORDER BY PRODUCT_PRICE
+	 </entry>
+	 
+	 <entry key="insertReport"> 
+	 	INSERT INTO REPORT_LIST(REPORT_NO ,REPORTER_USER_NO ,REPORTED_USER_NO ,REPORT_REASON ,REPORT_CONTENT ,REPORT_NUMER) 
+	 	VALUES(SEQ_RNO.NEXTVAL,?,?,?,?,SYSDATE) 
+	 </entry>
+	 
+	<entry key="reportListCount"> 
+		SELECT COUNT(*) COUNT FROM REPORT_LIST 
+	</entry>
+	
+	<entry key="reportList"> 
+		SELECT * 
+		FROM (SELECT ROWNUM RNUM,A.* 
+				FROM (SELECT REPORT_NO 
+							,(SELECT USER_ID FROM MEMBER_LIST WHERE USER_NO = REPORTER_USER_NO) REPORTER 
+							,(SELECT USER_ID FROM MEMBER_LIST WHERE USER_NO = REPORTED_USER_NO) REPORTED 
+							,REPORT_REASON 
+							,REPORT_CONTENT 
+							,REPORT_NUMER 
+							FROM REPORT_LIST 
+							ORDER BY REPORT_NO DESC)A) 
+		WHERE RNUM BETWEEN ? AND ? 
+	</entry>
+	
+	<entry key="reportDetailView"> 
+		SELECT REPORT_NO 
+				,(SELECT USER_ID FROM MEMBER_LIST WHERE USER_NO = REPORTER_USER_NO) REPORTER 
+				,(SELECT USER_ID FROM MEMBER_LIST WHERE USER_NO = REPORTED_USER_NO) REPORTED 
+				,REPORT_REASON 
+				,REPORT_CONTENT 
+				,REPORT_NUMER 
+				FROM REPORT_LIST 
+		WHERE REPORT_NO = ? 
+	</entry>
+</properties>

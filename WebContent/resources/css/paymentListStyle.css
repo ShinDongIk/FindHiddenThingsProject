@@ -1,0 +1,79 @@
+    #pay_outer{
+        height: 74%;
+        
+        display: flex
+    }
+
+    #pay_content_1{
+       height: 100%;
+       width: 10%;
+    }
+
+    #pay_content_2{
+       height: 100%;
+       width: 80%;  
+    }
+
+    #pay_content_3{
+       height: 100%;
+       width: 10%;
+    }
+
+    #pay_table-css{
+        border: none;
+    }
+    #pay_table-css tr,#pay_table-css td{
+        border: none;
+    }
+    table{
+        border-collapse: collapse;
+        border-top: 1px solid #444444;
+    }
+    th, td {
+        border-bottom: 1px solid #444444;
+        padding: 10px;
+    }
+    
+    .pay_table{
+        width: 100%;
+    }
+    .pay_table th,
+    .pay_table td {
+        padding: 3px;
+        font-size: 14px;
+    }
+    
+    .pay_table td{
+        text-align: center;
+    }
+
+    #pay_outer #pay_content_2_4{
+        margin-top: 10px;
+        font-size: 0;
+    }
+
+    #pay_outer #pay_content_2_4 a{
+        display: inline-block;
+        margin-left:10px;
+        padding: 5px 10px;
+        border: 1px solid black;
+        border-radius: 0px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        background-color: rgb(64, 228, 132);
+    }
+
+    #pay_outer #pay_content_2_4 a:first-child {
+        margin-left: 0;
+    }
+
+    .pay_table tbody td:nth-child(2) {
+        width: 140px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+    
+    
